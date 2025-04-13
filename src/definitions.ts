@@ -8,12 +8,12 @@ export enum DeliveryStatus {
   FAILED = 'FAILED',
 }
 
-type TSmsSendPayload = {
+export type TSmsSendPayload = {
   phoneNumber: string;
   message: string;
 };
 
-type TSmsSendResponse = {
+export type TSmsSendResponse = {
   sentStatus: SentStatus;
   deliveryStatus: DeliveryStatus;
 };

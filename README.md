@@ -1,30 +1,27 @@
-# bastion-sms
+# bastion-sms-plugin
 
-basic sms send/delivery plugin
+Basic SMS Android/IOS plugin for Capacitor 6 and higher
 
 ## Install
 
 ```bash
-npm install bastion-sms
+npm i @bs-solutions/bastion-sms-plugin
 npx cap sync
 ```
 
 ## API
 
-<docgen-index>
-
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
-
-</docgen-index>
-
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
+```ts
+const { deliveryStatus } = await BastionSMSPlugin.sendSMS({ phoneNumber, message });
+```
+
 ### Type Aliases
 
-
 #### TSmsSendPayload
+
 
 <code>{ phoneNumber: string; message: string; }</code>
 
@@ -53,3 +50,15 @@ npx cap sync
 | **`FAILED`**    | <code>'FAILED'</code>    |
 
 </docgen-api>
+
+## Maintainer
+
+[sudondie](https://github.com/sudondie)
+
+## Contributing
+
+Please contribute! [Look at the issues](https://github.com/Bastion-RND/bastion-sms-plugin/issues).
+
+## License
+
+MIT © 2025
