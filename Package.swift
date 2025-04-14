@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "BastionSms",
+    name: "BsSolutionsBastionSmsPlugin",
     platforms: [.iOS(.v15)],
     products: [
         .library(
-            name: "BastionSms",
+            name: "BsSolutionsBastionSmsPlugin",
             targets: ["BastionSMSPlugin"])
     ],
     dependencies: [
