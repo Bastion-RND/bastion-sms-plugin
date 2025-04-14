@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import androidx.core.content.ContextCompat;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -30,7 +31,13 @@ public class BastionSMSPlugin extends Plugin {
             return;
         }
 
-        savedCall = call; // Сохраняем call для ответа позже
+        // Check if device has SIM card and is ready
+        if (!hasSimCard()) {
+            call.reject("NOSIM");
+            return;
+        }
+
+        savedCall = call; // Save call for later response
 
         try {
             SmsManager smsManager = SmsManager.getDefault();
@@ -49,7 +56,7 @@ public class BastionSMSPlugin extends Plugin {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
             );
 
-            // Регистрируем BroadcastReceiver динамически
+            // Register dynamic BroadcastReceiver
             IntentFilter sentFilter = new IntentFilter("SMS_SENT");
             IntentFilter deliveredFilter = new IntentFilter("SMS_DELIVERED");
 
@@ -85,8 +92,8 @@ public class BastionSMSPlugin extends Plugin {
                             switch (getResultCode()) {
                                 case Activity.RESULT_OK:
                                     result.put("deliveryStatus", "DELIVERED");
-                                    savedCall.resolve(result); // Отправляем финальный результат
-                                    getContext().unregisterReceiver(this); // Отписываемся
+                                    savedCall.resolve(result); // Send final result
+                                    getContext().unregisterReceiver(this); // Unregister
                                     break;
                                 default:
                                     result.put("deliveryStatus", "FAILED");
@@ -105,5 +112,17 @@ public class BastionSMSPlugin extends Plugin {
         } catch (Exception e) {
             call.reject("SMS sending failed", e);
         }
+    }
+
+    private boolean hasSimCard() {
+        TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager == null) {
+            return false;
+        }
+
+        // Check if device has a SIM card inserted
+        int simState = telephonyManager.getSimState();
+        return simState != TelephonyManager.SIM_STATE_ABSENT
+               && simState != TelephonyManager.SIM_STATE_UNKNOWN;
     }
 }
